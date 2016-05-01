@@ -28,3 +28,5 @@ FROM invoice as t1, invoice_detail as t2, goods as t3
 WHERE t2.invoice_id = t1.inv_id AND t1.inv_type = 1 AND t2.good_id = t3.goods_id
 GROUP BY good_id
 
+test AtomP
+testing
