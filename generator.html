@@ -1,0 +1,409 @@
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+		<title>Dashboard Template for Bootstrap</title>
+
+		<!-- Bootstrap core CSS -->
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Custom styles for this template -->
+		<link href="css/admin.css" rel="stylesheet">
+		<link href="css/dashboard.css" rel="stylesheet">
+
+		<!-- Just for debugging purposes. Don't actually copy this line! -->
+		<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">OLAP System</a>
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="#">Dashboard</a></li>
+						<li><a href="#">Settings</a></li>
+						<li><a href="#">Profile</a></li>
+						<li><a href="#">Help</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-3 col-md-2 sidebar">
+					<ul class="nav nav-sidebar">
+						<li><a href="dash.html">Overview</a></li>
+						<li><a href="reports.html">Отчёты</a></li>
+						<li><a href="#">OLAP анализ</a></li>
+						<li class="active"><a href="generator.html">Генератор</a></li>
+					</ul>
+				</div>
+				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+					<h1 class="page-header">Генератор тестовых данных</h1>
+					<form role="form" action="php/generate.php" method="post" class="row">
+						<div class="box box-primary t_city col-md-4">
+							<div class="box-header with-border">
+								<h3 class="box-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse_city">Таблица "City"</a></h3>
+								<div class="checkbox">
+										<label>
+											<input type="checkbox" id="CheckboxCity" value="CheckboxCity" name="CheckboxCity"> Check me out
+										</label>
+									</div>
+							</div>
+						<!-- /.box-header -->
+						<!-- form start -->
+
+							<div class="box-body">
+								<div class="form-group col-xs-7">
+									<label for="InputNumCity">Количество записей</label>
+									<input type="number" class="form-control" name="InputNumCity" id="InputNumCity" placeholder="Введите количество записей">
+								</div>
+							</div>
+							<!-- /.box-body -->
+							<div class="box-footer">
+								<button type="submit" name="submitCity"  class="btn btn-primary">Сгенерировать таблицу "City"</button>
+							</div>
+
+
+						<div class="table-responsive collapse" id="collapse_city">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Название города</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+										require_once 'php/connection.php';
+										mysqli_query($link, "set names utf8");
+										$query7 ="SELECT * FROM city";
+										$result7 = mysqli_query($link, $query7);
+
+										while ($row = mysqli_fetch_array($result7, MYSQLI_NUM)) {
+											echo '<tr>';
+											echo '<td>' . $row['0'] . '</td>';
+											echo '<td>' . $row['1'] . '</td>';
+											echo '</tr>';
+										}
+									?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+						<div class="box box-primary t_contractor col-md-4">
+						<div class="box-header with-border">
+							<h3 class="box-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse_contactor">Таблица "Contractor"</a></h3>
+							<div class="checkbox">
+									<label>
+										<input type="checkbox" id="CheckboxContractor" value="CheckboxContractor" name="CheckboxContractor"> Check me out
+									</label>
+								</div>
+						</div>
+						<!-- /.box-header -->
+						<!-- form start -->
+
+							<div class="box-body">
+								<div class="form-group col-xs-7">
+									<label for="InputNumContractor">Количество записей</label>
+									<input type="number" class="form-control" id="InputNumContractor" name="InputNumContractor" placeholder="Введите количество записей">
+								</div>
+							</div>
+							<!-- /.box-body -->
+
+							<div class="box-footer">
+								<button type="submit" name="submitContractor" class="btn btn-primary">Сгенерировать таблицу "Contractor"</button>
+							</div>
+
+						<div class="table-responsive collapse" id="collapse_contactor">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>ФИО контрагента</th>
+										<th>Адрес контрагента</th>
+										<th>Телефон контрагента</th>
+										<th>Тип контрагента</th>
+										<th>ID города</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+										require_once 'php/connection.php';
+										mysqli_query($link, "set names utf8");
+										$query8 ="SELECT * FROM contractor";
+										$result8 = mysqli_query($link, $query8);
+
+										while ($row = mysqli_fetch_array($result8, MYSQLI_NUM)) {
+											echo '<tr>';
+											echo '<td>' . $row['0'] . '</td>';
+											echo '<td>' . $row['1'] . '</td>';
+											echo '<td>' . $row['2'] . '</td>';
+											echo '<td>' . $row['3'] . '</td>';
+											//echo '<td>' . $row['4'] . '</td>';
+											if ($row[4]) {
+												echo '<td>'. $row['4'] . ' (покупатель)</td>';
+											} else echo '<td>'. $row['4'] . ' (продавец)</td>';
+											echo '<td>' . $row['5'] . '</td>';
+											echo '</tr>';
+										}
+									?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+						<div class="box box-primary t_goodsgroup col-md-4">
+						<div class="box-header with-border">
+							<h3 class="box-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse_goodsgroup">Таблица "Goods_group"</a></h3>
+							<div class="checkbox">
+									<label>
+										<input type="checkbox" id="CheckboxGoodsgroup" value="CheckboxGooudsgroup" name="CheckboxGoodsgroup"> Check me out
+									</label>
+								</div>
+						</div>
+						<!-- /.box-header -->
+						<!-- form start -->
+
+							<div class="box-body">
+								<div class="form-group col-xs-7">
+									<label for="InputNumGoodgroup">Количество записей</label>
+									<input type="number" max="29" class="form-control" id="InputNumGoodgroup" name="InputNumGoodgroup" placeholder="Введите количество записей">
+								</div>
+							</div>
+							<!-- /.box-body -->
+
+							<div class="box-footer">
+								<button type="submit" name="submitGoodsgroup" class="btn btn-primary">Сгенерировать таблицу "Goods_group"</button>
+							</div>
+
+						<div class="table-responsive collapse" id="collapse_goodsgroup">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Название группы</th>
+										<th>Описание группы</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+										require_once 'php/connection.php';
+										mysqli_query($link, "set names utf8");
+										$query9 ="SELECT * FROM goods_group";
+										$result9 = mysqli_query($link, $query9);
+
+										while ($row = mysqli_fetch_array($result9, MYSQLI_NUM)) {
+											echo '<tr>';
+											echo '<td>' . $row['0'] . '</td>';
+											echo '<td>' . $row['1'] . '</td>';
+											echo '<td>' . $row['2'] . '</td>';
+											echo '</tr>';
+										}
+									?>
+								</tbody>
+							</table>
+						</div>
+</div>
+						<div class="box box-primary t_goods col-md-4">
+						<div class="box-header with-border">
+							<h3 class="box-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse_goods">Таблица "Goods"</a></h3>
+							<div class="checkbox">
+									<label>
+										<input type="checkbox" id="CheckboxGoods" value="CheckboxGoods" name="CheckboxGoods"> Check me out
+									</label>
+								</div>
+						</div>
+						<!-- /.box-header -->
+						<!-- form start -->
+
+							<div class="box-body">
+								<div class="form-group col-xs-7">
+									<label for="InputNumGoods">Количество записей</label>
+									<input type="number" class="form-control" id="InputNumGoods" name="InputNumGoods" placeholder="Введите количество записей">
+								</div>
+							</div>
+							<!-- /.box-body -->
+
+							<div class="box-footer">
+								<button type="submit" name="submitGoods" class="btn btn-primary">Сгенерировать таблицу "Goods"</button>
+							</div>
+
+						<div class="table-responsive collapse" id="collapse_goods">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Название товара</th>
+										<th>Цена товара</th>
+										<th>Количество в наличии</th>
+										<th>ID группы</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+										require_once 'php/connection.php';
+										mysqli_query($link, "set names utf8");
+										$query10 ="SELECT * FROM goods";
+										$result10 = mysqli_query($link, $query10);
+
+										while ($row = mysqli_fetch_array($result10, MYSQLI_NUM)) {
+											echo '<tr>';
+											echo '<td>' . $row['0'] . '</td>';
+											echo '<td>' . $row['1'] . '</td>';
+											echo '<td>' . $row['2'] . ' <b class="price">&#8399;<b></td>';
+											echo '<td>' . $row['3'] . '</td>';
+											echo '<td>' . $row['4'] . '</td>';
+											echo '</tr>';
+										}
+									?>
+								</tbody>
+							</table>
+						</div>
+</div>
+						<div class="box box-primary t_invoice col-md-4">
+						<div class="box-header with-border">
+							<h3 class="box-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse_invoice">Таблица "Invoice"</a></h3>
+							<div class="checkbox">
+									<label>
+										<input type="checkbox" id="CheckboxInvoice" value="CheckboxInvoice" name="CheckboxInvoice"> Check me out
+									</label>
+								</div>
+						</div>
+						<!-- /.box-header -->
+						<!-- form start -->
+
+							<div class="box-body">
+								<div class="form-group col-xs-7">
+									<label for="InputNumInvoice">Количество записей</label>
+									<input type="number" class="form-control" id="InputNumInvoice" name="InputNumInvoice" placeholder="Введите количество записей">
+								</div>
+							</div>
+							<!-- /.box-body -->
+
+							<div class="box-footer">
+								<button type="submit" name="submitInvoice" class="btn btn-primary">Сгенерировать таблицу "Invoice"</button>
+							</div>
+
+						<div class="table-responsive collapse" id="collapse_invoice">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Тип Инвойса</th>
+										<th>Дата</th>
+										<th>Итоговая цена</th>
+										<th>ID контрагента</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+										require_once 'php/connection.php';
+										mysqli_query($link, "set names utf8");
+										$query11 ="SELECT * FROM invoice";
+										$result11 = mysqli_query($link, $query11);
+
+										while ($row = mysqli_fetch_array($result11, MYSQLI_NUM)) {
+											echo '<tr>';
+											echo '<td>' . $row['0'] . '</td>';
+											echo '<td>' . $row['1'] . '</td>';
+											echo '<td>' . $row['2'] . '</td>';
+											echo '<td>' . $row['3'] . '</td>';
+											echo '<td>' . $row['4'] . '</td>';
+											echo '</tr>';
+										}
+									?>
+								</tbody>
+							</table>
+						</div>
+</div>
+						<div class="box box-primary t_invoicedetail col-md-4">
+						<div class="box-header with-border">
+							<h3 class="box-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse_invoicedetail">Таблица "Invoice_detail"</a></h3>
+							<div class="checkbox">
+									<label>
+										<input type="checkbox" id="CheckboxInvoicedetail" value="CheckboxInvoicedetail" name="CheckboxInvoicedetail"> Check me out
+									</label>
+								</div>
+						</div>
+						<!-- /.box-header -->
+						<!-- form start -->
+
+							<div class="box-body">
+								<div class="form-group col-xs-7">
+									<label for="InputNumInvoicedetail">Количество записей</label>
+									<input type="number" class="form-control" id="InputNumInvoicedetail" name="InputNumInvoicedetail" placeholder="Введите количество записей">
+								</div>
+							</div>
+							<!-- /.box-body -->
+
+							<div class="box-footer">
+								<button type="submit" name="submitInvoicedetail" class="btn btn-primary">Сгенерировать таблицу "Invoice_detail"</button>
+							</div>
+
+						<div class="table-responsive collapse" id="collapse_invoicedetail">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Количество</th>
+										<th>ID товара</th>
+										<th>ID инвойса</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+										require_once 'php/connection.php';
+										mysqli_query($link, "set names utf8");
+										$query12 ="SELECT * FROM invoice_detail";
+										$result12 = mysqli_query($link, $query12);
+
+										while ($row = mysqli_fetch_array($result12, MYSQLI_NUM)) {
+											echo '<tr>';
+											echo '<td>' . $row['0'] . '</td>';
+											echo '<td>' . $row['1'] . '</td>';
+											echo '<td>' . $row['2'] . '</td>';
+											echo '<td>' . $row['3'] . '</td>';
+											echo '</tr>';
+										}
+									?>
+								</tbody>
+							</table>
+						</div>
+</div>
+						<button type="submit" name="submitDB" class="btn btn-primary col-md-2 col-md-offset-10">Сгенерировать данные</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<!-- Bootstrap core JavaScript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="http://getbootstrap.com/assets/js/docs.min.js"></script>
+	</body>
+	</html>

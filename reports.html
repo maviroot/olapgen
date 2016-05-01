@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>Dashboard Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/admin.css" rel="stylesheet">
+    <link href="css/dashboard.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">OLAP System</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Help</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li><a href="dash.html">Overview</a></li>
+                    <li class="active"><a href="#">Отчёты</a></li>
+                    <li><a href="#">OLAP анализ</a></li>
+                    <li><a href="generator.html">Генератор</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <h1 class="page-header">Отчёты</h1>
+                <div class="box box-primary rep_circle_goods">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse_rep_circle_goods">ABC-анализ в управлении товарными запасами</a></h3>
+                        <h6>по товарам</h6>
+                        <h6>по группам товаров</h6>
+                    </div>
+                    <div class="box-body">
+                        <div class="table-responsive collapse in" id="collapse_rep_circle_goods">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                    <th>#</th>
+                                    <th>Название товара</th>
+                                    <th>Выручка</th>
+                                    <th>Доля выручки</th>
+                                    <th>Доля нарастающим итогом</th>
+                                    <th>ABC - группа</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                        error_reporting( E_ERROR );
+                                        require_once 'php/connection.php';
+                                        mysqli_query($link, "set names utf8");
+                                        $query1 = "SELECT t3.goods_name, sum(quantity)*t3.goods_cost
+                                                                FROM invoice as t1, invoice_detail as t2, goods as t3
+                                                                WHERE t2.invoice_id = t1.inv_id AND t1.inv_type = 1 AND t2.good_id = t3.goods_id
+                                                                GROUP BY good_id
+                                                                ORDER BY SUM( quantity ) * t3.goods_cost DESC";
+                                        $result1 = mysqli_query($link, $query1) or trigger_error(mysqli_error($link));
+
+                                        while ($row = mysqli_fetch_array($result1, MYSQLI_NUM)) {
+                                                $rows[] = $row[1];
+                                                $rows_txt[] = $row;
+                                        }
+
+                                        $row_cnt = mysqli_num_rows($result1);
+
+                                        for ($i = 0; $i < $row_cnt; $i++) {
+                                            $part[] = ($rows[$i]*100)/array_sum($rows);
+                                            $part1[] = $part1[$i-1]  + $part[$i];
+                                            echo '<tr>';
+                                            echo '<td>', $i+1, '</td>';
+                                            echo '<td>' . $rows_txt[$i][0] . '</td>';
+                                            echo '<td>', number_format($rows_txt[$i][1], 0, ',', ' '), '</td>';
+                                            echo '<td>', number_format($part[$i], 2),  '</td>';
+                                            echo '<td>', number_format($part1[$i], 2), '</td>';
+                                            if ($part1[$i] > 80) {
+                                                if ($part1[$i] > 95) {
+                                                    echo '<td>C</td>';
+                                                } else {
+                                                      echo '<td>B</td>';
+                                                  }
+                                            } else {
+                                                  echo '<td>A</td>';
+                                              }
+                                            echo '</tr>';
+                                        }
+                                    ?>
+                                </tbody>
+                            </table>                    
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                    
+                    </div>
+                </div>
+                <div class="box box-primary rep_circle_contr">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse_rep_circle_contr">Рейтинг клиентов по обороту за текущий год</a></h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="table-responsive collapse in" id="collapse_rep_circle_contr">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Контрагент</th>
+                                        <th>Дата последней продажи</th>
+                                        <th>Сумма оборота</th>
+                                        <th>Доля от оборота</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                        error_reporting( E_ERROR );
+                                        require_once 'php/connection.php';
+                                        mysqli_query($link, "set names utf8");
+                                        
+                                    ?>
+                                </tbody>
+                            </table>                    
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                    
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+  
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="http://getbootstrap.com/assets/js/docs.min.js"></script>
+  
+</body>
+</html>

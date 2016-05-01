@@ -1,0 +1,30 @@
+SET foreign_key_checks = 0;
+truncate table contractor;
+truncate table city;
+truncate table goods;
+truncate table goods_group;
+truncate table invoice;
+truncate table invoice_detail;
+SET foreign_key_checks = 1;
+
+
+SELECT * FROM goods as t1, invoice_detail as t2
+WHERE t1.goods_id=t2.good_id
+
+SELECT *,
+(select sum(quantity) from invoice_detail where invoice_detail.good_id=goods.goods_id)
+FROM goods
+left JOIN invoice_detail ON goods.goods_id=invoice_detail.good_id
+left JOIN invoice ON invoice_detail.invoice_id=invoice.inv_id
+
+
+SELECT t1.goods_name, sum(quantity), sum(quantity)*t1.goods_cost
+FROM goods as t1, invoice_detail as t2
+WHERE t2.good_id = t1.goods_id
+group by t1.goods_id
+
+SELECT t3.goods_name, sum(quantity)*t3.goods_cost
+FROM invoice as t1, invoice_detail as t2, goods as t3
+WHERE t2.invoice_id = t1.inv_id AND t1.inv_type = 1 AND t2.good_id = t3.goods_id
+GROUP BY good_id
+
